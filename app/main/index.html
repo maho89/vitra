@@ -1,0 +1,38 @@
+<div>
+    <div id="toolbar"> </div>
+    <div id="drawer">
+        <div id="content">     </div>
+    </div>
+    <footer >© ნიკორა ტრეიდი 2022</footer>
+</div>
+<script>
+    const height = $(window).height();
+    const data = JSON.parse(localStorage.data);
+    const pages = data.pages;
+    $("#toolbar").kendoToolBar({
+        items: [
+            {type: "button", icon: "menu", attributes: {"class": "k-flat"}, click: ()=>{ if ($("#drawer").parent().hasClass("k-drawer-expanded")) {  drawer.hide();} else {  drawer.show();}}},
+            { type: "spacer" },
+            {template: `<div id='toolbar_title'> </div>`},
+            { type: "spacer" },
+            {type: "button",icon: 'track-changes-accept',click: ()=>{ note() }, text: "შენიშვნები" },
+        ]
+    }).data('kendoToolBar');
+    const  drawer =$("#drawer").kendoDrawer({
+        hide:(e)=>{e.preventDefault();},
+        mode: "push",
+        mini: true,
+        position: 'left',
+        width: 200,
+        minHeight: height-70,
+        height:height-70,
+        swipeToOpen: false,
+        template:`<ul>`+ pages.map((e)=>{
+            return `
+                    <a href="#/${e.name}" data-role='drawer-item' class="drawer-item drawer-item_${e.name}">
+                    <span class='k-icon ${e.icon} '></span><span class='k-item-text'>${e.title}</span>
+                    <div class="blade"></div>
+                    </a>`
+        }).join('')+`</ul>`
+    }).data('kendoDrawer');
+</script>
